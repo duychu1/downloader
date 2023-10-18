@@ -17,3 +17,6 @@ dependencyResolutionManagement {
 rootProject.name = "Downloader"
 include(":app")
 include(":core-database")
+include(":core-datastore")
+include(":core-model")
+include(":core-common")
