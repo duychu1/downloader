@@ -35,9 +35,7 @@ dependencies {
 
     implementation(libs.android.core.ktx)
 
-
-    val androidComposeBom = platform(libs.android.compose.bom)
-    implementation(androidComposeBom)
+    implementation(platform(libs.android.compose.bom))
 
     implementation(libs.android.activity.compose)
 

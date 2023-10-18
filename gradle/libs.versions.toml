@@ -1,8 +1,8 @@
 [versions]
 androidGradlePlugin = "8.1.2"
 androidLibraryPlugin = "8.1.2"
-kotlinAndroid = "1.8.0"
-kotlinKsp = "1.8.0-1.0.8"
+kotlinAndroid = "1.9.10"
+kotlinKsp = "1.9.10-1.0.13"
 hilt = "2.47"
 hiltWork = "1.0.0"
 hiltCompiler = "1.0.0"
@@ -28,6 +28,9 @@ androidx-test-ext-junit = "1.1.5"
 espresso-core = "3.5.1"
 appcompat = "1.6.1"
 material = "1.10.0"
+protobuf = "3.24.0"
+protobufPlugin = "0.9.4"
+dataStore = "1.0.0"
 
 
 [libraries]
@@ -71,7 +74,6 @@ room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 #}
 
-
 accompanist-system-uicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "googleAccompanist" }
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "googleAccompanist" }
 
@@ -85,6 +87,10 @@ androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+
+protobuf-kotlin-lite = { group = "com.google.protobuf", name = "protobuf-kotlin-lite", version.ref = "protobuf" }
+protobuf-protoc = { group = "com.google.protobuf", name = "protoc", version.ref = "protobuf" }
+dataStore-core = { group = "androidx.datastore", name = "datastore", version.ref = "dataStore" }
 
 [bundles]
 androidComposeLibs = ["android-compose-ui-tooling", "android-compose-ui-tooling-preview", "android-compose-ui",
@@ -103,3 +109,5 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlinAnd
 kotlin-ksp = { id = "com.google.devtools.ksp", version.ref = "kotlinKsp" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 secrets = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secrets" }
+protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
+
