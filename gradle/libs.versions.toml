@@ -31,6 +31,8 @@ material3 = "1.1.2"
 protobuf = "3.24.0"
 protobufPlugin = "0.9.4"
 dataStore = "1.0.0"
+material = "1.10.0"
+androidLifecycle = "2.6.2"
 
 
 [libraries]
@@ -53,6 +55,8 @@ android-constraintlayout-compose = { module = "androidx.constraintlayout:constra
 android-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "androidNavigationCompose" }
 android-navigation-compose-ktx = { module = "androidx.navigation:navigation-common-ktx", version.ref = "androidNavigationCompose" }
 android-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
+android-lifecycle-runtimeCompose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidLifecycle" }
+android-lifecycle-viewModelCompose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidLifecycle" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 
 
@@ -93,6 +97,7 @@ appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "a
 protobuf-kotlin-lite = { group = "com.google.protobuf", name = "protobuf-kotlin-lite", version.ref = "protobuf" }
 protobuf-protoc = { group = "com.google.protobuf", name = "protoc", version.ref = "protobuf" }
 dataStore-core = { group = "androidx.datastore", name = "datastore", version.ref = "dataStore" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 [bundles]
 androidComposeLibs = [
