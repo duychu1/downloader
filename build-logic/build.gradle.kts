@@ -24,5 +24,13 @@ gradlePlugin {
             id = "downloader-hilt"
             implementationClass = "DownloaderHiltConventionPlugin"
         }
+        register("downloaderComposeApplicationConventionPlugin") {
+            id = "downloader-compose-application"
+            implementationClass = "AndroidComposeApplicationConventionPlugin"
+        }
+        register("downloaderComposeLibraryConventionPlugin") {
+            id = "downloader-compose-library"
+            implementationClass = "AndroidComposeLibraryConventionPlugin"
+        }
     }
 }

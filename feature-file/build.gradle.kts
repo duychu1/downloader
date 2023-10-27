@@ -1,6 +1,7 @@
 plugins {
     id("downloader-android-library")
     id("downloader-hilt")
+    id("downloader-compose-library")
 
 }
 
@@ -22,6 +23,7 @@ dependencies {
 
     implementation(libs.hilt.navigation.compose)
     implementation(libs.android.lifecycle.viewModelCompose)
+    implementation(libs.coil.compose)
 
 
     testImplementation(libs.junit)

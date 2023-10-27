@@ -21,7 +21,7 @@ androidConstraintLayoutCompose = "1.0.1"
 coilCompose = "2.2.2"
 googleAccompanist = "0.32.0"
 coroutines = "1.7.3"
-androidxComposeCompiler = "1.4.1"
+androidxComposeCompiler = "1.5.3"
 secrets = "2.0.1"
 junit = "4.13.2"
 androidx-test-ext-junit = "1.1.5"
@@ -51,6 +51,10 @@ android-compose-material3 = { module = "androidx.compose.material3:material3" }
 android-compose-material3-windowSizeClass = { group = "androidx.compose.material3", name = "material3-window-size-class" }
 android-compose-runtime = { group = "androidx.compose.runtime", name = "runtime" }
 android-compose-foundation = { group = "androidx.compose.foundation", name = "foundation" }
+android-compose-foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout" }
+android-compose-material-iconsExtended = { group = "androidx.compose.material", name = "material-icons-extended" }
+
+
 android-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "androidConstraintLayoutCompose" }
 android-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "androidNavigationCompose" }
 android-navigation-compose-ktx = { module = "androidx.navigation:navigation-common-ktx", version.ref = "androidNavigationCompose" }
