@@ -1,6 +1,7 @@
 plugins {
     id("downloader-android-library")
     id("downloader-hilt")
+    id("downloader-compose-library")
 
 }
 
@@ -22,10 +23,13 @@ dependencies {
     api(libs.android.compose.material3)
     api(libs.android.compose.runtime)
     api(libs.android.compose.ui.tooling.preview)
+    api(libs.android.compose.ui.tooling)
     api(libs.android.compose.ui.util)
+    api(libs.android.compose.foundation.layout)
 
     implementation(libs.coil.compose)
     implementation(libs.accompanist.permissions)
+    implementation(libs.android.compose.material.iconsExtended)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
