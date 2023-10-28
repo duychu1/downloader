@@ -1,12 +1,10 @@
 plugins {
     id("downloader-android-library")
     id("downloader-hilt")
-    id("downloader-compose-library")
-
 }
 
 android {
-    namespace = "com.duycomp.downloader.feature.file"
+    namespace = "com.duycomp.downloader.core.data"
 
     defaultConfig {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -17,15 +15,10 @@ android {
 
 dependencies {
 
-    implementation(project(":core-designsystem"))
     implementation(project(":core-model"))
     implementation(project(":core-common"))
-    implementation(project(":core-data"))
-
-    implementation(libs.hilt.navigation.compose)
-    implementation(libs.android.lifecycle.viewModelCompose)
-    implementation(libs.android.lifecycle.runtimeCompose)
-    implementation(libs.coil.compose)
+    implementation(project(":core-database"))
+    implementation(project(":core-datastore"))
 
 
     testImplementation(libs.junit)

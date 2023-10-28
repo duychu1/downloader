@@ -63,6 +63,12 @@ fun CardVideoItem(
             contentAlignment = Alignment.Center
         ) {
 
+            DynamicAsyncImage(
+                imageUrl = uri,
+                contentDescription = "uriLocal",
+                modifier = Modifier.fillMaxSize()
+            )
+            
             DeleteIconButton(onDeleteIconClick)
 
             Text(
