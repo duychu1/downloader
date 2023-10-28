@@ -20,11 +20,9 @@ dependencies {
     implementation(project(":core-designsystem"))
     implementation(project(":core-model"))
     implementation(project(":core-common"))
-    implementation(project(":core-data"))
 
     implementation(libs.hilt.navigation.compose)
     implementation(libs.android.lifecycle.viewModelCompose)
-    implementation(libs.android.lifecycle.runtimeCompose)
     implementation(libs.coil.compose)
 
 

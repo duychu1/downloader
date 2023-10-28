@@ -2,9 +2,7 @@ package com.duycomp.downloader.feature.file
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
@@ -13,18 +11,20 @@ import androidx.compose.ui.unit.dp
 import com.duycomp.downloader.core.model.VideoInfo
 
 @Composable
-fun LazyGridScope.CardVideoList(
-    items: List<VideoInfo>
-) {
-    items(items) {
-        CardVideoItem(title = it.title, uri = it.uri, duration = it.duration)
+fun CardVideoList(items: List<VideoInfo>) {
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(3),
+        contentPadding = PaddingValues(4.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
+
+    ) {
+        items(items) {
+            CardVideoItem(title = it.title, uri = it.uri, duration = it.duration)
+        }
     }
+
 }
-
-
-
-
-
 
 
 val fakeVideoInfo: List<VideoInfo> = listOf(
@@ -39,6 +39,6 @@ val fakeVideoInfo: List<VideoInfo> = listOf(
 @Preview
 @Composable
 fun PrevCardVideoList(items: List<VideoInfo> = fakeVideoInfo) {
-//    CardVideoList(items = items)
+    CardVideoList(items = items)
     
 }
