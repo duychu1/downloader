@@ -14,15 +14,15 @@ gradlePlugin {
     plugins {
         register("downloaderApplicationConventionPlugin") {
             id = "downloader-android-application"
-            implementationClass = "DownloaderApplicationConventionPlugin"
+            implementationClass = "AndroidApplicationConventionPlugin"
         }
         register("downloaderLibraryConventionPlugin") {
             id = "downloader-android-library"
-            implementationClass = "DownloaderLibraryConventionPlugin"
+            implementationClass = "AndroidLibraryConventionPlugin"
         }
         register("downloaderHiltConventionPlugin") {
             id = "downloader-hilt"
-            implementationClass = "DownloaderHiltConventionPlugin"
+            implementationClass = "AndroidHiltConventionPlugin"
         }
         register("downloaderComposeApplicationConventionPlugin") {
             id = "downloader-compose-application"

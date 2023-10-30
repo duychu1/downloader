@@ -64,7 +64,4 @@ val dark_surfaceTint = Color(0xFF65D3FF)
 val dark_surfaceTintColor = Color(0xFF65D3FF)
 
 
-val seed = Color(0xFF0A627D)
-
-val bkg_icon = Color(0xFF1D1D1D)
 

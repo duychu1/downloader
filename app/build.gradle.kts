@@ -1,5 +1,6 @@
 plugins {
     id("downloader-android-application")
+    id("downloader-compose-application")
     id("downloader-hilt")
 }
 
@@ -18,12 +19,6 @@ android {
         }
     }
 
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.3"
-    }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -33,15 +28,20 @@ android {
 
 dependencies {
 
+    implementation(project(":core-designsystem"))
+    implementation(project(":core-model"))
+    implementation(project(":core-common"))
+    implementation(project(":core-data"))
+
+    implementation(project(":feature-download"))
+    implementation(project(":feature-file"))
+
     implementation(libs.android.core.ktx)
-
-    implementation(platform(libs.android.compose.bom))
-
     implementation(libs.android.activity.compose)
+    implementation(libs.android.lifecycle.runtimeCompose)
+    implementation(libs.android.navigation.compose)
+    implementation(libs.hilt.navigation.compose)
 
-    implementation(libs.bundles.androidComposeLibs)
-
-    implementation(libs.bundles.googleAccompanistLibs)
 
 
     testImplementation("junit:junit:4.13.2")

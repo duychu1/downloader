@@ -34,6 +34,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.duycomp.downloader.core.designsystem.icon.DownloaderIcon
 
 @Composable
 fun DownloadRoute() {
@@ -231,7 +232,7 @@ fun ButtonCustom(
         Box(Modifier.fillMaxSize()) {
             if (isShowSwapIconOnTop) {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_swap_vert),
+                    imageVector = DownloaderIcon.swapVert,
                     modifier = Modifier
                         .align(Alignment.CenterStart)
                         .clickable(onClick = onSwapIconClick),

@@ -4,7 +4,7 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
 
 
-class DownloaderHiltConventionPlugin : Plugin<Project> {
+class AndroidHiltConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             pluginManager.apply {
