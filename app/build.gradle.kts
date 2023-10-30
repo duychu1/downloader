@@ -41,7 +41,7 @@ dependencies {
     implementation(libs.android.lifecycle.runtimeCompose)
     implementation(libs.android.navigation.compose)
     implementation(libs.hilt.navigation.compose)
-
+    implementation(libs.splashscreen)
 
 
     testImplementation("junit:junit:4.13.2")

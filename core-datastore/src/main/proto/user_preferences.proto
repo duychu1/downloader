@@ -9,4 +9,5 @@ message UserPreferences  {
     DarkThemeConfigProto dark_theme_config = 1;
     bool isRate = 2;
     bool isVip = 3;
+    bool useDynamicColor = 4;
 }

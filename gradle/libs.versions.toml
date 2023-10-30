@@ -33,6 +33,7 @@ protobufPlugin = "0.9.4"
 dataStore = "1.0.0"
 material = "1.10.0"
 androidLifecycle = "2.6.2"
+splashscreen = "1.0.1"
 
 
 [libraries]
@@ -62,6 +63,8 @@ android-activity-compose = { module = "androidx.activity:activity-compose", vers
 android-lifecycle-runtimeCompose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidLifecycle" }
 android-lifecycle-viewModelCompose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidLifecycle" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
+splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "splashscreen" }
+
 
 
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }

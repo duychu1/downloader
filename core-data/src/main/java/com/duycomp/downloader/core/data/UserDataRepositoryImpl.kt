@@ -16,6 +16,10 @@ class UserDataRepositoryImpl @Inject constructor(
         downloaderPreferencesDataSource.setDarkThemeConfig(darkThemeConfig)
     }
 
+    override suspend fun setDynamicColorPreference(useDynamicColor: Boolean) {
+        downloaderPreferencesDataSource.setDynamicColorPreference(useDynamicColor)
+    }
+
     override suspend fun setRate(value: Boolean) {
         downloaderPreferencesDataSource.setRate(value)
     }

@@ -8,6 +8,7 @@ interface UserDataRepository {
 
     val userData: Flow<UserData>
     suspend fun setDarkThemeConfig(darkThemeConfig: DarkThemeConfig)
+    suspend fun setDynamicColorPreference(useDynamicColor: Boolean)
     suspend fun setRate(value: Boolean)
     suspend fun setVip(value: Boolean)
 

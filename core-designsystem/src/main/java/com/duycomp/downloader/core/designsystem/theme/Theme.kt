@@ -2,6 +2,7 @@ package com.duycomp.downloader.core.designsystem.theme
 
 import android.app.Activity
 import android.os.Build
+import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -12,7 +13,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.ViewCompat
 
 
-private val LightColors = lightColorScheme(
+val LightDefaultColorScheme = lightColorScheme(
     primary = light_primary,
     onPrimary = light_onPrimary,
     primaryContainer = light_primaryContainer,
@@ -42,8 +43,7 @@ private val LightColors = lightColorScheme(
     surfaceTint = light_surfaceTint,
 )
 
-
-private val DarkColors = darkColorScheme(
+val DarkDefaultColorScheme = darkColorScheme(
     primary = dark_primary,
     onPrimary = dark_onPrimary,
     primaryContainer = dark_primaryContainer,
@@ -76,25 +76,26 @@ private val DarkColors = darkColorScheme(
 @Composable
 fun DownloaderTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
-    content: @Composable () -> Unit
+//    androidTheme: Boolean = false,
+    disableDynamicTheming: Boolean = true,
+    content: @Composable () -> Unit,
 ) {
+    // Color scheme
     val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+        !disableDynamicTheming && supportsDynamicTheming() -> {
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
-        darkTheme -> DarkColors
-        else -> LightColors
+
+        else -> if (darkTheme) DarkDefaultColorScheme else LightDefaultColorScheme
     }
-    val view = LocalView.current
-    if (!view.isInEditMode) {
-        SideEffect {
-            (view.context as Activity).window.statusBarColor = colorScheme.primary.toArgb()
-            ViewCompat.getWindowInsetsController(view)?.isAppearanceLightStatusBars = darkTheme
-        }
-    }
+//    val view = LocalView.current
+//    if (!view.isInEditMode) {
+//        SideEffect {
+//            (view.context as Activity).window.statusBarColor = colorScheme.primary.toArgb()
+//            ViewCompat.getWindowInsetsController(view)?.isAppearanceLightStatusBars = darkTheme
+//        }
+//    }
 
     MaterialTheme(
         colorScheme = colorScheme,
@@ -102,3 +103,6 @@ fun DownloaderTheme(
         content = content
     )
 }
+
+@ChecksSdkIntAtLeast(api = Build.VERSION_CODES.S)
+fun supportsDynamicTheming() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
