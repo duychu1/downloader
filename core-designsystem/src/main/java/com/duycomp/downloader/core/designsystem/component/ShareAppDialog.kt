@@ -75,7 +75,7 @@ fun ShareAppDialog(
                         val clip: ClipData = ClipData.newPlainText("url", appLink)
                         clipboard.setPrimaryClip(clip)
 
-                        toasttext(msg = "Link copied", context)
+                        toasttext(msg = context.resources.getString(R.string.link_copied), context)
                         onDismiss()
                     },
                 ) {
