@@ -4,8 +4,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import com.duycomp.downloader.core.designsystem.icon.DownloaderIcon
 
 enum class ScreenDestination(
-    title: String,
-    icon: ImageVector
+    val title: String,
+    val icon: ImageVector
 ) {
     DOWNLOAD(
         title = "Download",

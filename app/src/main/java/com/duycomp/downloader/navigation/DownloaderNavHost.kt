@@ -14,6 +14,7 @@ fun DownloaderNavHost(
     navController: NavHostController = rememberNavController(),
     startDestination: String = downloadRoute,
     modifier: Modifier,
+    handleDrawer: () -> Unit,
 ) {
     NavHost(
         navController = navController,
