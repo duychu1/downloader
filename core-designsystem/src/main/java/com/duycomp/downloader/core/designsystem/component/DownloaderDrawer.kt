@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -39,6 +40,7 @@ fun TdDrawer(
     handelDrawer: () -> Unit,
 ) {
     val context = LocalContext.current
+    val uriHandler = LocalUriHandler.current
     Column(
         Modifier
             .fillMaxHeight()
@@ -59,13 +61,7 @@ fun TdDrawer(
         
         DrawerTutorial(
             onClick =  {
-                val link = context.resources.getString(string.link_tutorial)
-                val intentTutorial = Intent(Intent.ACTION_VIEW, Uri.parse(link))
-                try {
-                    context.startActivity(intentTutorial)
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
+                uriHandler.openUri(context.resources.getString(string.link_tutorial))
             }
         )
 
