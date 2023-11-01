@@ -20,5 +20,6 @@ internal fun Project.configureKotlinAndroid(commonExtension: CommonExtension<*, 
                 jvmTarget = JavaVersion.VERSION_17.toString()
             }
         }
+
     }
 }

@@ -20,7 +20,6 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                     buildConfig = true
                 }
             }
-
         }
     }
 }

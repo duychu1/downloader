@@ -17,6 +17,8 @@ android {
 
 dependencies {
 
+    implementation(project(":core-model"))
+
     implementation(platform(libs.android.compose.bom))
 
     api(libs.android.compose.foundation)

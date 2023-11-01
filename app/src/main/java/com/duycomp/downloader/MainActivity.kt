@@ -1,5 +1,6 @@
 package com.duycomp.downloader
 
+import android.content.ClipboardManager
 import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -8,17 +9,11 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -26,15 +21,17 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.duycomp.downloader.MainActivityUiState.*
 import com.duycomp.downloader.core.designsystem.theme.DownloaderTheme
 import com.duycomp.downloader.core.model.DarkThemeConfig
+import com.duycomp.downloader.ui.DownloaderApp
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
+    private lateinit var clipboard: ClipboardManager
     private val viewModel: MainActivityViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,6 +39,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         var uiState: MainActivityUiState by mutableStateOf(Loading)
+
+        clipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
 
         // Update the uiState
         lifecycleScope.launch {
@@ -90,15 +89,16 @@ class MainActivity : ComponentActivity() {
                 onDispose {}
             }
 
-            DownloaderTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    TODO()
-
-                }
+            DownloaderTheme(
+                darkTheme = darkTheme,
+                disableDynamicTheming = shouldDisableDynamicTheming(uiState = uiState)
+            ) {
+                DownloaderApp(
+                    clipboard = clipboard,
+                    userData = (uiState as Success).userData,
+                    setDarkThemeConFig = viewModel::setDarkThemeConfig,
+                    setDisableDynamicColor = viewModel::setDisableDynamicColor,
+                )
             }
         }
     }
@@ -135,10 +135,10 @@ private fun shouldUseDarkTheme(
  * The default light scrim, as defined by androidx and the platform:
  * https://cs.android.com/androidx/platform/frameworks/support/+/androidx-main:activity/activity/src/main/java/androidx/activity/EdgeToEdge.kt;l=35-38;drc=27e7d52e8604a080133e8b842db10c89b4482598
  */
-private val lightScrim = android.graphics.Color.argb(0xe6, 0xFF, 0xFF, 0xFF)
+private val lightScrim = Color.argb(0xe6, 0xFF, 0xFF, 0xFF)
 
 /**
  * The default dark scrim, as defined by androidx and the platform:
  * https://cs.android.com/androidx/platform/frameworks/support/+/androidx-main:activity/activity/src/main/java/androidx/activity/EdgeToEdge.kt;l=40-44;drc=27e7d52e8604a080133e8b842db10c89b4482598
  */
-private val darkScrim = android.graphics.Color.argb(0x80, 0x1b, 0x1b, 0x1b)
+private val darkScrim = Color.argb(0x80, 0x1b, 0x1b, 0x1b)
