@@ -28,7 +28,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.rememberNavController
-import com.duycomp.downloader.core.designsystem.component.TdDrawer
 import com.duycomp.downloader.core.designsystem.permissions.RequestPermissions
 import com.duycomp.downloader.core.model.DarkThemeConfig
 import com.duycomp.downloader.core.model.UserData
@@ -40,10 +39,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun DownloaderApp(
     clipboard: ClipboardManager,
-    userData: UserData,
     appState: DownloaderAppState = DownloaderAppState(rememberNavController()),
-    setDarkThemeConFig: (DarkThemeConfig) -> Unit,
-    setDisableDynamicColor: (Boolean) -> Unit,
 ) {
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -57,9 +53,6 @@ fun DownloaderApp(
                 if (drawerState.isOpen) {
                     TdDrawer(
                         clipboard = clipboard,
-                        userData = userData,
-                        setDarkThemeConFig = setDarkThemeConFig,
-                        setDisableDynamicColor = setDisableDynamicColor,
                     ) { handleDrawer(scopeDrawer, drawerState) }
                 }
             },

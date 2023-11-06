@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-const val DB_NAME = "videos_info_fb"
+const val DB_NAME = "videos_data_fb"
 
 @Entity(tableName = DB_NAME)
 data class VideoInfoEntity (

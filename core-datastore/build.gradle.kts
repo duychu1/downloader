@@ -1,6 +1,6 @@
 plugins {
     id("downloader-android-library")
-    id("downloader-hilt")
+    id("downloader-android-hilt")
     alias(libs.plugins.protobuf)
 
 }

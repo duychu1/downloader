@@ -95,9 +95,6 @@ class MainActivity : ComponentActivity() {
             ) {
                 DownloaderApp(
                     clipboard = clipboard,
-                    userData = (uiState as Success).userData,
-                    setDarkThemeConFig = viewModel::setDarkThemeConfig,
-                    setDisableDynamicColor = viewModel::setDisableDynamicColor,
                 )
             }
         }

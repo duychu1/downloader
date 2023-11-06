@@ -8,6 +8,7 @@ plugins {
 dependencies {
     compileOnly(libs.android.gradlePlugin)
     compileOnly(libs.kotlin.gradlePlugin)
+    compileOnly(libs.ksp.gradlePlugin)
 }
 
 gradlePlugin {
@@ -21,7 +22,7 @@ gradlePlugin {
             implementationClass = "AndroidLibraryConventionPlugin"
         }
         register("downloaderHiltConventionPlugin") {
-            id = "downloader-hilt"
+            id = "downloader-android-hilt"
             implementationClass = "AndroidHiltConventionPlugin"
         }
         register("downloaderComposeApplicationConventionPlugin") {
@@ -32,5 +33,10 @@ gradlePlugin {
             id = "downloader-compose-library"
             implementationClass = "AndroidComposeLibraryConventionPlugin"
         }
+        register("downloaderRoomConventionPlugin") {
+            id = "downloader-android-room"
+            implementationClass = "AndroidRoomConventionPlugin"
+        }
+
     }
 }

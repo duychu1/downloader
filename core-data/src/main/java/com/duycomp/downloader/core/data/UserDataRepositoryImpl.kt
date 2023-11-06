@@ -27,4 +27,8 @@ class UserDataRepositoryImpl @Inject constructor(
     override suspend fun setVip(value: Boolean) {
         downloaderPreferencesDataSource.setVip(value)
     }
+
+    override suspend fun setBtnDownloadOnTop(value: Boolean) {
+        downloaderPreferencesDataSource.setBtnDownloadOnTop(value)
+    }
 }

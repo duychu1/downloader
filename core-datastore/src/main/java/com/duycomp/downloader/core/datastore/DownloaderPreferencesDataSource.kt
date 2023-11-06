@@ -26,6 +26,7 @@ class DownloaderPreferencesDataSource @Inject constructor(
                 useDynamicColor = it.useDynamicColor,
                 isRate = it.isRate,
                 isVip = it.isVip,
+                isDownloadBtnOnTop = !it.isDownloadBtnOnBottom
             )
         }
 
@@ -65,5 +66,14 @@ class DownloaderPreferencesDataSource @Inject constructor(
             }
         }
     }
+
+    suspend fun setBtnDownloadOnTop(value: Boolean) {
+        userPreferences.updateData {
+            it.copy {
+                this.isDownloadBtnOnBottom = !value
+            }
+        }
+    }
+
 
 }

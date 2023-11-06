@@ -16,4 +16,16 @@ class VideoDatabaseRepositoryImpl @Inject constructor(
             it.map(VideoInfoEntity::asExternalModel)
         }
 
+    override suspend fun insert(videoInfoEntity: VideoInfoEntity) {
+        videoInfoDao.insert(videoInfoEntity)
+    }
+
+    override suspend fun delete(videoInfoEntity: VideoInfoEntity) {
+        videoInfoDao.delete(videoInfoEntity)
+    }
+
+    override suspend fun update(videoInfoEntity: VideoInfoEntity) {
+        videoInfoDao.update(videoInfoEntity)
+    }
+
 }

@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.duycomp.downloader.core.common"
+    namespace = "com.duycomp.downloader.core.model"
 
     defaultConfig {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -13,7 +13,5 @@ android {
 }
 
 dependencies {
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.test.ext.junit)
-    androidTestImplementation(libs.espresso.core)
+
 }

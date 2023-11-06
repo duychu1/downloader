@@ -5,4 +5,5 @@ data class UserData(
     val useDynamicColor: Boolean,
     val isRate: Boolean,
     val isVip: Boolean,
+    val isDownloadBtnOnTop: Boolean,
 )

@@ -11,5 +11,6 @@ interface UserDataRepository {
     suspend fun setDynamicColorPreference(useDynamicColor: Boolean)
     suspend fun setRate(value: Boolean)
     suspend fun setVip(value: Boolean)
+    suspend fun setBtnDownloadOnTop(value: Boolean)
 
 }

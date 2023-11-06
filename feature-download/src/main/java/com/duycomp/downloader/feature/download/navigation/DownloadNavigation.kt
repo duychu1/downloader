@@ -1,5 +1,6 @@
 package com.duycomp.downloader.feature.download.navigation
 
+import android.content.ClipboardManager
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -12,10 +13,10 @@ fun NavController.navigateToDownload(navOptions: NavOptions? = null) {
     this.navigate(downloadRoute, navOptions)
 }
 
-fun NavGraphBuilder.downloadScreen() {
+fun NavGraphBuilder.downloadScreen(clipboard: ClipboardManager) {
     composable(
         route = downloadRoute
     ) {
-        DownloadRoute()
+        DownloadRoute(clipboard = clipboard)
     }
 }

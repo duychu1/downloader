@@ -1,8 +1,6 @@
-package com.duycomp.downloader.core.designsystem.component
+package com.duycomp.downloader.ui
 
 import android.content.ClipboardManager
-import android.content.Intent
-import android.net.Uri
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.expandVertically
@@ -25,18 +23,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.duycomp.downloader.core.designsystem.R.string
+import com.duycomp.downloader.core.designsystem.component.ShareAppDialog
 import com.duycomp.downloader.core.designsystem.icon.DownloaderIcon
 import com.duycomp.downloader.core.model.DarkThemeConfig
 import com.duycomp.downloader.core.model.UserData
+import com.duycomp.downloader.feature.setting.SettingsDialog
 
 //import com.google.android.play.core.review.ReviewManagerFactory
 
 @Composable
 fun TdDrawer(
     clipboard: ClipboardManager,
-    userData: UserData,
-    setDarkThemeConFig: (DarkThemeConfig) -> Unit,
-    setDisableDynamicColor: (Boolean) -> Unit,
     handelDrawer: () -> Unit,
 ) {
     val context = LocalContext.current
@@ -67,11 +64,7 @@ fun TdDrawer(
 
         DrawerDirectory()
         
-        DrawerTheme(
-            userData = userData,
-            setDarkThemeConFig = setDarkThemeConFig,
-            setDisableDynamicColor = setDisableDynamicColor
-        )
+        DrawerTheme()
         
         DrawerShare(clipboard = clipboard)
 
@@ -235,11 +228,7 @@ fun DrawerDirectory(onClick: () -> Unit = {  }) {
 
 
 @Composable
-fun DrawerTheme(
-    userData: UserData,
-    setDarkThemeConFig: (DarkThemeConfig) -> Unit,
-    setDisableDynamicColor: (Boolean) -> Unit,
-) {
+fun DrawerTheme() {
 
     var isShowDialog by remember { mutableStateOf(false) }
 
@@ -247,7 +236,7 @@ fun DrawerTheme(
         icon = DownloaderIcon.folder,
         title = stringResource(id = string.directory),
         expanded = {
-//            ShareAppDialog(onDismiss = { isShowDialog = false })
+            SettingsDialog(onDismiss = { isShowDialog = false })
         }
     )
 

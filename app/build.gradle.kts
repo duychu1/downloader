@@ -1,7 +1,7 @@
 plugins {
     id("downloader-android-application")
     id("downloader-compose-application")
-    id("downloader-hilt")
+    id("downloader-android-hilt")
 }
 
 android {
@@ -26,6 +26,14 @@ android {
     }
 }
 
+configurations {
+    create("cleanedAnnotations")
+    implementation {
+//        exclude(group = "org.jetbrains", module = "annotations")
+        exclude(group = "com.intellij", module = "annotations")
+    }
+}
+
 dependencies {
 
     implementation(project(":core-designsystem"))
@@ -35,6 +43,7 @@ dependencies {
 
     implementation(project(":feature-download"))
     implementation(project(":feature-file"))
+    implementation(project(":feature-setting"))
 
     implementation(libs.android.core.ktx)
     implementation(libs.android.activity.compose)

@@ -1,7 +1,6 @@
 package com.duycomp.downloader.feature.download
 
 import android.content.ClipboardManager
-import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -34,16 +33,27 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.duycomp.downloader.core.designsystem.icon.DownloaderIcon
 
 @Composable
-fun DownloadRoute() {
+fun DownloadRoute(
+    modifier: Modifier = Modifier,
+    clipboard: ClipboardManager,
+    viewModel: DownloadViewModel = hiltViewModel(),
+) {
 
 }
 
 @Composable
 fun DownloadScreen() {
-
+//    DownloadScreenContent(
+//        modifier = Modifier,
+//        clipboard = ,
+//        status = ,
+//        textField = ,
+//        isDownloadBtnOnTop =
+//    )
 }
 
 @Composable
@@ -140,22 +150,7 @@ fun ColumnScope.DownloadMainContent(
 //    clipboard: ClipboardManager
 ) {
 
-    Box(modifier = Modifier
-        .fillMaxWidth()
-        .height(36.dp)
-    ) {
-        OutlinedButton(
-            onClick = { /*TODO*/ },
-            modifier = Modifier
-                .fillMaxHeight()
-                .align(Alignment.Center)
-        ) {
-            Text(
-                text = "How to download!",
-                modifier = Modifier.padding(horizontal = 10.dp)
-            )
-        }
-    }
+    TutorialButton()
 
     Spacer(modifier = Modifier.height(18.dp))
 
@@ -206,6 +201,37 @@ fun ColumnScope.DownloadMainContent(
         isShowSwapIconOnTop = false,
         onSwapIconClick = { /*TODO*/ },
     )
+}
+
+@Composable
+private fun TutorialButton() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(36.dp)
+    ) {
+        OutlinedButton(
+            onClick = { /*TODO*/ },
+            modifier = Modifier
+                .fillMaxHeight()
+                .align(Alignment.Center)
+        ) {
+            Text(
+                text = "How to download!",
+                modifier = Modifier.padding(horizontal = 10.dp)
+            )
+        }
+    }
+
+    OutlinedButton(
+        onClick = { /*TODO*/ },
+        modifier = Modifier.height(36.dp)
+    ) {
+        Text(
+            text = "How to download!",
+            modifier = Modifier.padding(horizontal = 10.dp)
+        )
+    }
 }
 
 

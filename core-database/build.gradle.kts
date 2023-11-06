@@ -1,6 +1,7 @@
 plugins {
     id("downloader-android-library")
-    id("downloader-hilt")
+    id("downloader-android-hilt")
+    id("downloader-android-room")
 }
 
 android {
@@ -15,13 +16,4 @@ android {
 
 dependencies {
 
-    implementation(libs.room.runtime)
-    implementation(libs.room.compiler)
-
-
-
-
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.test.ext.junit)
-    androidTestImplementation(libs.espresso.core)
 }

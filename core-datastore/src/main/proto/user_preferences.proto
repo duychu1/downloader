@@ -10,4 +10,5 @@ message UserPreferences  {
     bool isRate = 2;
     bool isVip = 3;
     bool useDynamicColor = 4;
+    bool isDownloadBtnOnBottom = 5;
 }
