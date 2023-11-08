@@ -15,14 +15,20 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.view.WindowCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.duycomp.downloader.MainActivityUiState.*
+import com.duycomp.downloader.core.designsystem.component.toasttext
 import com.duycomp.downloader.core.designsystem.theme.DownloaderTheme
 import com.duycomp.downloader.core.model.DarkThemeConfig
 import com.duycomp.downloader.ui.DownloaderApp
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -33,10 +39,11 @@ class MainActivity : ComponentActivity() {
 
     private lateinit var clipboard: ClipboardManager
     private val viewModel: MainActivityViewModel by viewModels()
-
+    private var textClipboard by mutableStateOf("")
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
 
         var uiState: MainActivityUiState by mutableStateOf(Loading)
 
@@ -78,8 +85,10 @@ class MainActivity : ComponentActivity() {
             DisposableEffect(darkTheme) {
                 enableEdgeToEdge(
                     statusBarStyle = SystemBarStyle.auto(
-                        Color.TRANSPARENT,
-                        Color.TRANSPARENT,
+//                        Color.TRANSPARENT,
+//                        Color.TRANSPARENT,
+                        Color.CYAN,
+                        Color.CYAN
                     ) { darkTheme },
                     navigationBarStyle = SystemBarStyle.auto(
                         lightScrim,
@@ -95,7 +104,21 @@ class MainActivity : ComponentActivity() {
             ) {
                 DownloaderApp(
                     clipboard = clipboard,
+                    textClipboard = textClipboard,
                 )
+            }
+        }
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+
+        if (hasFocus) {
+            clipboard.primaryClip?.also {
+                val text = it.getItemAt(0)?.text.toString()
+                lifecycleScope.launch {
+                    textClipboard = text
+                }
             }
         }
     }

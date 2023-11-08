@@ -2,7 +2,10 @@ package com.duycomp.downloader.feature.download
 
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
+import android.util.Log
 import android.widget.Toast
+import androidx.compose.ui.platform.UriHandler
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.duycomp.downloader.core.common.result.Result
@@ -36,8 +39,8 @@ class DownloadViewModel @Inject constructor(
     private val _status = MutableStateFlow("Let start!")
     val status: StateFlow<String> = _status
 
-    private val _textField = MutableSharedFlow<String>(1)
-    val textField: SharedFlow<String> = _textField
+    private val _textField = MutableStateFlow("")
+    val textField: StateFlow<String> = _textField
 
     val isDownloadBtnOnTop: StateFlow<Boolean> = userDataRepository.userData.map {
         it.isDownloadBtnOnTop
@@ -47,13 +50,13 @@ class DownloadViewModel @Inject constructor(
         initialValue = true,
     )
 
-    fun saveVideo(
+    private suspend fun saveVideo(
         context: Context,
+        url: String
     ) {
-        viewModelScope.launch {
             onStatusChange("Collecting video data")
 
-            val videoDataNetwork = videoNetworkRepository.fetchVideoInfo(textField.toString())
+            val videoDataNetwork = videoNetworkRepository.fetchVideoInfo(url)
 
             val fileName = videoDataNetwork.authorName + videoDataNetwork.aid
 
@@ -77,7 +80,7 @@ class DownloadViewModel @Inject constructor(
                             title = fileName,
                             uri = saveToLocal.data,
                             duration = videoDataNetwork.toDurationString()
-                        ).asEntity()
+                        )
                     )
                     toastFromCoroutine(context, "Download completed!")
                 }
@@ -85,23 +88,44 @@ class DownloadViewModel @Inject constructor(
                 else -> {  }
             }
 
-        }
     }
 
-    fun onSwapBtnClick(isDownloadBtnOnTop: Boolean) = viewModelScope.launch {
+    suspend fun onTextClipboardChange(textClipboard: String, context: Context) {
+        _textField.value = textClipboard
+        Log.d(this.javaClass.name, "onTextClipboardChange: --$textClipboard--")
+//        saveVideo(context, textClipboard)
+
+    }
+
+    fun onSwapIconClick(isDownloadBtnOnTop: Boolean) = viewModelScope.launch {
         userDataRepository.setBtnDownloadOnTop(isDownloadBtnOnTop)
     }
 
-    fun onPatesBtnClick(clipboard: ClipboardManager) {
+    fun onPatesClick(clipboard: ClipboardManager) = viewModelScope.launch {
+        _textField.value = clipboard.primaryClip?.getItemAt(0)?.text.toString()
+    }
+
+    fun onOpenAppClick(context: Context) {
+        val intent: Intent? =
+            context.packageManager.getLaunchIntentForPackage(OTHER_APP_PACKAGE)
+
+        try {
+            context.startActivity(intent)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    fun onDownloadClick(context: Context) = viewModelScope.launch {
+        saveVideo(context= context, url = _textField.value)
+    }
+
+    fun onTutorialClick() {
 
     }
 
-    fun onOpenAppClick() {
-
-    }
-
-    fun onDownloadBtnClick() {
-
+    fun onTextFieldChange(value: String)  = viewModelScope.launch {
+        _textField.value = value
     }
 
 
@@ -116,4 +140,8 @@ class DownloadViewModel @Inject constructor(
 
         }
     }
+
+
 }
+
+private const val OTHER_APP_PACKAGE = "com.google.android.youtube"

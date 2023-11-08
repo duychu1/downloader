@@ -1,7 +1,7 @@
 package com.duycomp.downloader.navigation
 
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.duycomp.downloader.core.designsystem.icon.DownloaderIcon
+import com.duycomp.downloader.core.designsystem.icon.DownloaderIcons
 
 enum class ScreenDestination(
     val title: String,
@@ -9,10 +9,10 @@ enum class ScreenDestination(
 ) {
     DOWNLOAD(
         title = "Download",
-        icon = DownloaderIcon.download
+        icon = DownloaderIcons.download
     ),
     FILE(
         title = "File",
-        icon = DownloaderIcon.folder
+        icon = DownloaderIcons.folder
     )
 }

@@ -1,5 +1,6 @@
 package com.duycomp.downloader.core.data
 
+import com.duycomp.downloader.core.data.model.asEntity
 import com.duycomp.downloader.core.data.model.asExternalModel
 import com.duycomp.downloader.core.database.VideoInfoDao
 import com.duycomp.downloader.core.database.VideoInfoEntity
@@ -16,16 +17,16 @@ class VideoDatabaseRepositoryImpl @Inject constructor(
             it.map(VideoInfoEntity::asExternalModel)
         }
 
-    override suspend fun insert(videoInfoEntity: VideoInfoEntity) {
-        videoInfoDao.insert(videoInfoEntity)
+    override suspend fun insert(videoInfo: VideoInfo) {
+        videoInfoDao.insert(videoInfo.asEntity())
     }
 
-    override suspend fun delete(videoInfoEntity: VideoInfoEntity) {
-        videoInfoDao.delete(videoInfoEntity)
+    override suspend fun delete(videoInfo: VideoInfo) {
+        videoInfoDao.delete(videoInfo.asEntity())
     }
 
-    override suspend fun update(videoInfoEntity: VideoInfoEntity) {
-        videoInfoDao.update(videoInfoEntity)
+    override suspend fun update(videoInfo: VideoInfo) {
+        videoInfoDao.update(videoInfo.asEntity())
     }
 
 }

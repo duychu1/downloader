@@ -2,7 +2,6 @@ package com.duycomp.downloader.ui
 
 import android.content.ClipboardManager
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.*
@@ -24,15 +23,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.duycomp.downloader.core.designsystem.R.string
 import com.duycomp.downloader.core.designsystem.component.ShareAppDialog
-import com.duycomp.downloader.core.designsystem.icon.DownloaderIcon
-import com.duycomp.downloader.core.model.DarkThemeConfig
-import com.duycomp.downloader.core.model.UserData
+import com.duycomp.downloader.core.designsystem.icon.DownloaderIcons
 import com.duycomp.downloader.feature.setting.SettingsDialog
 
 //import com.google.android.play.core.review.ReviewManagerFactory
 
 @Composable
-fun TdDrawer(
+fun DownloaderDrawer(
     clipboard: ClipboardManager,
     handelDrawer: () -> Unit,
 ) {
@@ -50,6 +47,7 @@ fun TdDrawer(
             )
 //            .statusBarsPadding()
             .background(MaterialTheme.colorScheme.background)
+            .systemBarsPadding()
             .padding(12.dp)
             .verticalScroll(rememberScrollState())
     ) {
@@ -63,7 +61,7 @@ fun TdDrawer(
         )
 
         DrawerDirectory()
-        
+
         DrawerTheme()
         
         DrawerShare(clipboard = clipboard)
@@ -128,13 +126,16 @@ fun TdDrawer(
 //    }
 //}
 
+
 @Composable
 fun DrawerItem(
     icon: ImageVector,
     title: String,
-    isExpand: MutableState<Boolean> = mutableStateOf(false),
-    onClick: () -> Unit = { isExpand.value = !isExpand.value },
-    expanded: @Composable AnimatedVisibilityScope.() -> Unit = {  },
+    isExpand: MutableState<Boolean> = remember {
+        mutableStateOf(false)
+    },
+    onClick: (MutableState<Boolean>) -> Unit = { it.value = !it.value },
+    expanded: @Composable (MutableState<Boolean>) -> Unit = {  },
 ) {
 
     Column(modifier = Modifier.fillMaxWidth()) {
@@ -142,8 +143,8 @@ fun DrawerItem(
             Modifier
                 .fillMaxWidth()
                 .height(56.dp)
-                .clip(ShapeDefaults.Medium)
-                .clickable { onClick },
+                .clip(MaterialTheme.shapes.extraLarge)
+                .clickable { onClick(isExpand) },
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -152,39 +153,38 @@ fun DrawerItem(
             Spacer(modifier = Modifier.width(12.dp))
             Text(text = title, fontWeight = FontWeight.Medium)
         }
-
-        AnimatedVisibility(
-            visible = isExpand.value,
-            enter = expandVertically(),
-            exit = shrinkVertically()
-        ) {
-            expanded()
-        }
+        expanded(isExpand)
     }
-
-
-
 }
 
 @Composable
 fun ExpandedItem(
     text: String,
+    isExpand: MutableState<Boolean>,
     onClick: () -> Unit,
     content: @Composable () -> Unit = {
         TextCustom(text = text)
     }
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(42.dp)
-            .clip(ShapeDefaults.Medium)
-            .clickable { onClick() },
-        verticalAlignment = Alignment.CenterVertically
+    AnimatedVisibility(
+        visible = isExpand.value,
+        enter = expandVertically(),
+        exit = shrinkVertically()
     ) {
-        Spacer(modifier = Modifier.width(72.dp))
-        
-        content()
+
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(42.dp)
+                .clip(MaterialTheme.shapes.extraLarge)
+                .clickable { onClick() },
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Spacer(modifier = Modifier.width(72.dp))
+
+            content()
+        }
     }
 }
 
@@ -200,27 +200,49 @@ private fun TextCustom(text: String) {
 @Preview
 @Composable
 fun DrawerTutorial(onClick: () -> Unit = {  }) {
+    val isExpand: MutableState<Boolean> = remember {
+        mutableStateOf(false)
+    }
     DrawerItem(
-        icon = DownloaderIcon.setting,
+        icon = DownloaderIcons.setting,
         title = stringResource(id = string.how_to_use),
+        isExpand = isExpand,
         expanded = {
             ExpandedItem(
                 text = stringResource(id = string.video_tutorial),
-                onClick = onClick
+                isExpand = it,
+                onClick = onClick,
             )
         }
     )
 }
 
 @Composable
-fun DrawerDirectory(onClick: () -> Unit = {  }) {
+fun NewDirectory(onClick: () -> Unit = {  }) {
     DrawerItem(
-        icon = DownloaderIcon.folder,
+        icon = DownloaderIcons.folder,
         title = stringResource(id = string.directory),
         expanded = {
             ExpandedItem(
                 text = "/Download/${stringResource(id = string.app_name)}/",
+                isExpand = it,
                 onClick = onClick
+            )
+        }
+    )
+}
+
+@Preview
+@Composable
+fun DrawerDirectory(onClick: () -> Unit = {  }) {
+    DrawerItem(
+        icon = DownloaderIcons.folder,
+        title = stringResource(id = string.directory),
+        expanded = {
+            ExpandedItem(
+                text = "/Download/${stringResource(id = string.app_name)}/",
+                isExpand = it,
+                onClick = onClick,
             )
         }
     )
@@ -229,81 +251,35 @@ fun DrawerDirectory(onClick: () -> Unit = {  }) {
 
 @Composable
 fun DrawerTheme() {
-
-    var isShowDialog by remember { mutableStateOf(false) }
-
     DrawerItem(
-        icon = DownloaderIcon.folder,
-        title = stringResource(id = string.directory),
+        icon = DownloaderIcons.darkTheme,
+        title = stringResource(id = string.theme),
         expanded = {
-            SettingsDialog(onDismiss = { isShowDialog = false })
+            if (it.value) {
+                SettingsDialog(onDismiss = { it.value = !it.value })
+            }
         }
     )
 
-//    DrawerItem(
-//        icon = DownloaderIcon.darkTheme,
-//        title = stringResource(id = R.string.theme)
-//    ) {
-//        Column(modifier = Modifier.fillMaxWidth()) {
-//            ExpandedItem(
-//                text = stringResource(id = R.string.dark),
-//                onClick = {
-//
-//                }
-//            ) {
-//
-//            }
-//            ExpandedItem(
-//                text = stringResource(id = R.string.light),
-//                onClick = {
-//
-//                }
-//            ) {
-//
-//            }
-//            ExpandedItem(
-//                text = stringResource(id = R.string.follow_system),
-//                onClick = {
-//
-//                }
-//            ) {
-//
-//            }
-//
-//            when(userData.darkThemeConfig) {
-//                DarkThemeConfig.DARK -> {
-//
-//                }
-//                DarkThemeConfig.LIGHT -> {
-//
-//                }
-//                DarkThemeConfig.FOLLOW_SYSTEM -> {
-//
-//                }
-//            }
-//        }
-//
-//    }
 }
 
 @Composable
 fun DrawerShare(clipboard: ClipboardManager) {
-
-    var isShowDialog by remember { mutableStateOf(false) }
-
     DrawerItem(
-        icon = DownloaderIcon.folder,
+        icon = DownloaderIcons.share,
         title = stringResource(id = string.share),
         expanded = {
-            ShareAppDialog(onDismiss = { isShowDialog = false }, clipboard = clipboard)
+            if (it.value) {
+                ShareAppDialog(onDismiss = { it.value = !it.value } , clipboard = clipboard)
+            }
         }
     )
 }
 
 @Composable
-fun DrawerRate(onClick: () -> Unit) {
+fun DrawerRate(onClick: (MutableState<Boolean>) -> Unit = {  }) {
     DrawerItem(
-        icon = DownloaderIcon.star,
+        icon = DownloaderIcons.star,
         title = stringResource(id = string.rate),
         onClick = onClick
     )
@@ -351,7 +327,7 @@ fun item() {
         TextButton(
             onClick = { /*TODO*/ },
             modifier = Modifier.height(56.dp),
-            shape = ShapeDefaults.Medium
+            shape = MaterialTheme.shapes.extraLarge
         ) {
             Icon(imageVector = Icons.Rounded.Star, contentDescription = "null")
             Text(text = "Rate")

@@ -17,18 +17,21 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.duycomp.downloader.core.designsystem.icon.DownloaderIcons
 import com.duycomp.downloader.core.model.VideoInfo
 
 
@@ -47,6 +50,7 @@ fun FileRoute(
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FileScreen(
     uiState: VideoDataUiState,
@@ -57,9 +61,11 @@ fun FileScreen(
             VideoDataUiState.Loading -> Text("Loading")
             is VideoDataUiState.VideosData ->
                 FileScreenContent(
-                    videosData = uiState.videosData
+//                    videosData = uiState.videosData
+                    videosData = fakeVideoInfo
                 )
             is VideoDataUiState.Empty -> Text("No video")
+            else -> { }
         }
     }
 }

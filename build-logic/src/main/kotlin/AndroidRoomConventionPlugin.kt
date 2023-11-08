@@ -31,10 +31,7 @@ class AndroidRoomConventionPlugin : Plugin<Project> {
         }
     }
 
-    /**
-     * https://issuetracker.google.com/issues/132245929
-     * [Export schemas](https://developer.android.com/training/data-storage/room/migrating-db-versions#export-schemas)
-     */
+
     class RoomSchemaArgProvider(
         @get:InputDirectory
         @get:PathSensitive(PathSensitivity.RELATIVE)

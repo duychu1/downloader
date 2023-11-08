@@ -1,5 +1,7 @@
 package com.duycomp.downloader.feature.file
 
+import android.content.res.Configuration.UI_MODE_NIGHT_NO
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -71,51 +73,65 @@ fun CardVideoItem(
             
             DeleteIconButton(onDeleteIconClick)
 
-            Text(
-                text = duration,
-                modifier = Modifier
-                    .padding(top = 2.dp, end = 5.dp)
-                    .align(Alignment.TopEnd),
-                color = MaterialTheme.colorScheme.onPrimary,
-                fontSize = 10.sp,
-                fontWeight = FontWeight.Bold
-            )
+            TextDuration(duration)
         }
 
-        //description
-        Box(
-            Modifier
-                .fillMaxWidth()
-                .padding(start = 3.dp),
-        ) {
-            Text(
-                text = title,
-                modifier = Modifier
-                    .fillMaxWidth(0.8f)
-                    .align(Alignment.CenterStart),
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                color = MaterialTheme.colorScheme.onPrimary
-            )
-            Icon(
-                imageVector = shareIcon,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onPrimary,
-                modifier = Modifier
-                    .align(Alignment.CenterEnd)
-                    .padding(vertical = 3.dp)
-                    .clickable(onClick = onShareIconClick)
-            )
-//            }
-        }
+        TitleAndShareIcon(title, shareIcon, onShareIconClick)
     }
+}
+
+@Composable
+private fun TitleAndShareIcon(
+    title: String,
+    shareIcon: ImageVector,
+    onShareIconClick: () -> Unit
+) {
+    Box(
+        Modifier
+            .fillMaxWidth()
+            .padding(start = 3.dp),
+    ) {
+        Text(
+            text = title,
+            modifier = Modifier
+                .fillMaxWidth(0.8f)
+                .align(Alignment.CenterStart),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            color = MaterialTheme.colorScheme.onPrimary
+        )
+        Icon(
+            imageVector = shareIcon,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onPrimary,
+            modifier = Modifier
+                .align(Alignment.CenterEnd)
+                .padding(vertical = 2.dp)
+                .clip(MaterialTheme.shapes.small)
+                .clickable(onClick = onShareIconClick)
+        )
+//            }
+    }
+}
+
+@Composable
+private fun BoxScope.TextDuration(duration: String) {
+    Text(
+        text = duration,
+        modifier = Modifier
+            .padding(top = 4.dp, end = 8.dp)
+            .align(Alignment.TopEnd),
+        color = MaterialTheme.colorScheme.primary,
+        fontSize = 10.sp,
+        fontWeight = FontWeight.Bold
+    )
 }
 
 @Composable
 private fun BoxScope.DeleteIconButton(onDeleteIconClick: () -> Unit) {
     Box(
         modifier = Modifier
-            .fillMaxSize(0.2f)
+            .fillMaxSize(0.25f)
             .clip(MaterialTheme.shapes.small)
             .clickable(onClick = onDeleteIconClick)
             .align(Alignment.TopStart),
@@ -124,18 +140,19 @@ private fun BoxScope.DeleteIconButton(onDeleteIconClick: () -> Unit) {
         Icon(
             imageVector = Icons.Default.Delete,
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.onPrimary,
+            tint = MaterialTheme.colorScheme.primary,
         )
     }
 }
 
-@Preview
+@Preview(uiMode = UI_MODE_NIGHT_YES,)
+@Preview(uiMode = UI_MODE_NIGHT_NO)
 @Composable
 fun CardVideoItemPrev() {
 
     Surface(Modifier.width(140.dp)) {
         CardVideoItem(
-            title = "Long video title",
+            title = "Long video titlelllllllllllll",
             uri = "aa",
             duration = "00:32",
         )

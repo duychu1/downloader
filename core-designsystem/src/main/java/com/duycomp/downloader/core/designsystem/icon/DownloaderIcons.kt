@@ -5,13 +5,14 @@ import androidx.compose.material.icons.rounded.DarkMode
 import androidx.compose.material.icons.rounded.Download
 import androidx.compose.material.icons.rounded.Error
 import androidx.compose.material.icons.rounded.Folder
+import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material.icons.rounded.SwapVert
 
 
-object DownloaderIcon {
+object DownloaderIcons {
     val error = Icons.Rounded.Error
     val swapVert = Icons.Rounded.SwapVert
     val folder = Icons.Rounded.Folder
@@ -20,4 +21,5 @@ object DownloaderIcon {
     val darkTheme = Icons.Rounded.DarkMode
     val share = Icons.Rounded.Share
     val star = Icons.Rounded.Star
+    val menu = Icons.Rounded.Menu
 }

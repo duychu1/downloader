@@ -22,12 +22,12 @@ interface DataModule {
 
     @Binds
     fun bindsVideoDatabaseRepository(
-        videoDataRepository: VideoDatabaseRepositoryImpl
+        videoDatabaseRepository: VideoDatabaseRepositoryImpl
     ): VideoDatabaseRepository
 
     @Binds
     fun bindsVideoNetworkRepository(
-        userDataRepository: VideoNetworkRepositoryImpl
+        videoNetworkRepository: VideoNetworkRepositoryImpl
     ): VideoNetworkRepository
 
 }
