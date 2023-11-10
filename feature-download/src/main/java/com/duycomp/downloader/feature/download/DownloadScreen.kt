@@ -22,16 +22,12 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -40,9 +36,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.duycomp.downloader.core.designsystem.icon.DownloaderIcons
 
@@ -77,7 +70,7 @@ fun DownloadRoute(
     LaunchedEffect(key1 = textClipboard) {
         viewModel.onTextClipboardChange(textClipboard, context)
     }
-
+//toasttext(Build.VERSION.SDK_INT.toString(), context)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -263,7 +256,7 @@ fun ColumnScope.DownloadMainContent(
         } else
             stringResource(id = R.string.Open_AppName),
         onClick = {
-            if (isDownloadBtnOnTop) onDownloadClick()
+            if (!isDownloadBtnOnTop) onDownloadClick()
             else onOpenAppClick()
         },
         isShowSwapIcon = true,

@@ -11,15 +11,11 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.rounded.Share
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -61,7 +57,8 @@ fun CardVideoItem(
                 .fillMaxWidth()
                 .aspectRatio(1f)
                 .clip(MaterialTheme.shapes.small)
-                .background(Color.DarkGray),
+                .background(Color.DarkGray)
+                .clickable(onClick = onImageClick),
             contentAlignment = Alignment.Center
         ) {
 

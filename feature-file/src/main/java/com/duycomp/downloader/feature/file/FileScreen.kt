@@ -1,5 +1,6 @@
 package com.duycomp.downloader.feature.file
 
+import android.content.Context
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -17,21 +18,20 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.duycomp.downloader.core.designsystem.icon.DownloaderIcons
 import com.duycomp.downloader.core.model.VideoInfo
 
 
@@ -42,19 +42,36 @@ fun FileRoute(
 ) {
     val uiState by viewModel.uiSate.collectAsStateWithLifecycle()
 
+    val context = LocalContext.current
+    var isShowPlayVideo by remember { mutableStateOf(false) }
+
+    var uri by remember { mutableStateOf("") }
+
+    val onImageClick: (String) -> Unit = {
+        isShowPlayVideo = true
+        uri = it
+    }
+
+    if (isShowPlayVideo) PlayVideoDialog(uri = uri, onDismiss = { isShowPlayVideo = false })
+
     FileScreen(
         uiState = uiState,
-        modifier = modifier
+        modifier = modifier,
+        onDeleteVideo = viewModel::onDeleteVideo,
+        onShareVideo = viewModel::onShareVideo,
+        onImageClick = onImageClick
     )
 
 }
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FileScreen(
     uiState: VideoDataUiState,
-    modifier: Modifier
+    modifier: Modifier,
+    onImageClick: (String) -> Unit,
+    onDeleteVideo: (VideoInfo) -> Unit,
+    onShareVideo: (String, Context) -> Unit
 ) {
     Column(modifier = modifier) {
         when (uiState) {
@@ -62,16 +79,24 @@ fun FileScreen(
             is VideoDataUiState.VideosData ->
                 FileScreenContent(
 //                    videosData = uiState.videosData
-                    videosData = fakeVideoInfo
+                    videosData = fakeVideoInfo,
+                    onImageClick = onImageClick,
+                    onDeleteVideo = onDeleteVideo,
+                    onShareVideo = onShareVideo
                 )
+
             is VideoDataUiState.Empty -> Text("No video")
-            else -> { }
         }
     }
 }
 
 @Composable
-fun FileScreenContent(videosData: List<VideoInfo>) {
+fun FileScreenContent(
+    videosData: List<VideoInfo>,
+    onImageClick: (String) -> Unit,
+    onDeleteVideo: (VideoInfo) -> Unit,
+    onShareVideo: (String, Context) -> Unit
+) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),
         contentPadding = PaddingValues(4.dp),
@@ -82,7 +107,15 @@ fun FileScreenContent(videosData: List<VideoInfo>) {
             items = videosData,
             key = { item: VideoInfo -> item.id }
         ) {
-            CardVideoItem(title = it.title, uri = it.uri, duration = it.duration)
+            val context = LocalContext.current
+            CardVideoItem(
+                title = it.title,
+                uri = it.uri,
+                duration = it.duration,
+                onDeleteIconClick = { onDeleteVideo(it) },
+                onImageClick = { onImageClick(it.uri) },
+                onShareIconClick = { onShareVideo(it.uri, context) },
+            )
         }
     }
 }

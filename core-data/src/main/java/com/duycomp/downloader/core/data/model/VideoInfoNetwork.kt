@@ -4,8 +4,7 @@ import java.text.DecimalFormat
 
 data class VideoInfoNetwork(
     val url: String,
-    val authorName: String,
-    val aid: String,
+    val title: String,
     val duration: Long
 ) {
     fun toDurationString(): String {

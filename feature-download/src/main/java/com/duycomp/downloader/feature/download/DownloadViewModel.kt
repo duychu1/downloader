@@ -5,21 +5,17 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
-import androidx.compose.ui.platform.UriHandler
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.duycomp.downloader.core.common.result.Result
 import com.duycomp.downloader.core.data.UserDataRepository
 import com.duycomp.downloader.core.data.VideoDatabaseRepository
 import com.duycomp.downloader.core.data.VideoNetworkRepository
-import com.duycomp.downloader.core.data.model.asEntity
 import com.duycomp.downloader.core.model.VideoInfo
 import com.duycomp.downloader.feature.download.utils.saveFileToExternal
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
@@ -58,8 +54,6 @@ class DownloadViewModel @Inject constructor(
 
             val videoDataNetwork = videoNetworkRepository.fetchVideoInfo(url)
 
-            val fileName = videoDataNetwork.authorName + videoDataNetwork.aid
-
             onStatusChange("Downloading...")
             toastFromCoroutine(context, "Downloading")
 
@@ -67,17 +61,17 @@ class DownloadViewModel @Inject constructor(
                 url = videoDataNetwork.url,
                 mimeType = "video/mp4",
                 directory = "Downloader",
-                fileName = fileName,
+                fileName = videoDataNetwork.title,
                 context = context
             )
 
             when(saveToLocal) {
                 is Result.Success -> {
-                    onStatusChange("Saved: $fileName")
+                    onStatusChange("Saved: ${videoDataNetwork.title}")
                     videoDatabaseRepository.insert(
                         VideoInfo(
                             id = 0,
-                            title = fileName,
+                            title = videoDataNetwork.title,
                             uri = saveToLocal.data,
                             duration = videoDataNetwork.toDurationString()
                         )

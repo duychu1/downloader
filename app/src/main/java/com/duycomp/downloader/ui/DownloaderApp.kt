@@ -7,21 +7,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalNavigationDrawer
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -30,17 +23,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
-import androidx.navigation.NavDestination
-import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.rememberNavController
 import com.duycomp.downloader.core.designsystem.component.ShareAppDialog
 import com.duycomp.downloader.core.designsystem.icon.DownloaderIcons
 import com.duycomp.downloader.core.designsystem.permissions.RequestPermissions
 import com.duycomp.downloader.navigation.DownloaderNavHost
-import com.duycomp.downloader.navigation.ScreenDestination
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -144,43 +131,3 @@ private fun handleDrawer(
     }
 }
 
-@Composable
-private fun DownloaderBottomBar(
-    destinations: List<ScreenDestination>,
-    onNavigateToDestination: (ScreenDestination) -> Unit,
-    currentDestination: NavDestination?,
-) {
-
-    Column(Modifier.fillMaxWidth()) {
-        Divider(
-            modifier = Modifier.fillMaxWidth(),
-            color = MaterialTheme.colorScheme.primary.copy(0.3f),
-            thickness = 1.dp
-        )
-
-        NavigationBar(
-//            modifier = Modifier.heightIn(max = 76.dp),
-//            containerColor = Color.Transparent,
-        ) {
-            destinations.forEach { destination ->
-                val selected = currentDestination.isScreenDestinationInHierarchy(destination)
-                NavigationBarItem(
-                    selected = selected,
-                    onClick = { onNavigateToDestination(destination) },
-                    icon = {
-                        Icon(
-                            imageVector = destination.icon,
-                            contentDescription = "Navigation Icon"
-                        )
-                    },
-                    label = { Text(destination.title) }
-                )
-            }
-        }
-    }
-}
-
-private fun NavDestination?.isScreenDestinationInHierarchy(destination: ScreenDestination) =
-    this?.hierarchy?.any {
-        it.route?.contains(destination.name, true) ?: false
-    } ?: false
