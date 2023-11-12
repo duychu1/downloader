@@ -1,8 +1,8 @@
 package com.duycomp.downloader.core.data
 
-import com.duycomp.downloader.core.data.model.VideoInfoNetwork
+import com.duycomp.downloader.core.model.VideoInfo
 
 interface VideoNetworkRepository {
-    suspend fun fetchVideoInfo(url: String): VideoInfoNetwork
+    suspend fun fetchVideoInfo(url: String): Result<VideoInfo>
 }
 

@@ -8,16 +8,17 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.duycomp.downloader.core.common.result.Result
+import com.duycomp.downloader.core.common.result.asResult
 import com.duycomp.downloader.core.data.UserDataRepository
 import com.duycomp.downloader.core.data.VideoDatabaseRepository
 import com.duycomp.downloader.core.data.VideoNetworkRepository
-import com.duycomp.downloader.core.model.VideoInfo
 import com.duycomp.downloader.feature.download.utils.saveFileToExternal
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -49,45 +50,75 @@ class DownloadViewModel @Inject constructor(
     private suspend fun saveVideo(
         context: Context,
         url: String
-    ) {
-            onStatusChange("Collecting video data")
+    ) = withContext(Dispatchers.IO) {
+            onStatusChange("Collecting data")
 
-            val videoDataNetwork = videoNetworkRepository.fetchVideoInfo(url)
-
-            onStatusChange("Downloading...")
-            toastFromCoroutine(context, "Downloading")
-
-            val saveToLocal = saveFileToExternal(
-                url = videoDataNetwork.url,
-                mimeType = "video/mp4",
-                directory = "Downloader",
-                fileName = videoDataNetwork.title,
-                context = context
+            val videoInfo = videoNetworkRepository.fetchVideoInfo(url).fold(
+                onSuccess = { it },
+                onFailure = {
+                    onStatusChange("Can not fetch data!")
+                    return@withContext
+                }
             )
 
-            when(saveToLocal) {
-                is Result.Success -> {
-                    onStatusChange("Saved: ${videoDataNetwork.title}")
-                    videoDatabaseRepository.insert(
-                        VideoInfo(
-                            id = 0,
-                            title = videoDataNetwork.title,
-                            uri = saveToLocal.data,
-                            duration = videoDataNetwork.toDurationString()
-                        )
-                    )
-                    toastFromCoroutine(context, "Download completed!")
+        onStatusChange("Downloading...")
+        toastFromCoroutine(context, "Downloading...")
+
+        saveFileToExternal(
+            url = videoInfo.uri,
+            mimeType = "video/mp4",
+            directory = "Downloader",
+            fileName = videoInfo.title,
+            context = context
+        ).flowOn(Dispatchers.IO)
+            .asResult()
+            .collect { saveToExternal ->
+                Log.d(TAG, "saveVideo: collect")
+                when(saveToExternal) {
+                    is Result.Success -> {
+                        onStatusChange("Saved: ${videoInfo.title.take(18)}...")
+
+                        withContext(Dispatchers.IO) {
+                            videoDatabaseRepository.insert(
+                                videoInfo.copy(
+                                    uri = saveToExternal.data
+                                )
+                            )
+                        }
+
+                        toastFromCoroutine(context, "Download completed!")
+                    }
+                    is Result.Error -> {
+                        onStatusChange("Download error!")
+                        println(saveToExternal.exception?.printStackTrace())
+
+                    }
+                    is Result.Loading -> {
+
+                    }
                 }
-                is Result.Error -> onStatusChange("Cant download, some think went wrong")
-                else -> {  }
             }
 
+        //download manager
+//        val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+//        val request = DownloadManager.Request(Uri.parse(videoInfo.uri))
+//        request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE)
+//        request.setTitle(videoInfo.title)
+//        request.setDescription("Downloading...")
+//        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
+//        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "Downloader/${videoInfo.title}.mp4")
+//        downloadManager.enqueue(request)
     }
 
-    suspend fun onTextClipboardChange(textClipboard: String, context: Context) {
+    suspend fun onTextClipboardChange(textClipboard: String, context: Context) = viewModelScope.launch{
+        if (_textField.value == textClipboard) return@launch
         _textField.value = textClipboard
-        Log.d(this.javaClass.name, "onTextClipboardChange: --$textClipboard--")
-//        saveVideo(context, textClipboard)
+        if (!checkMatchUrl(textClipboard) && textClipboard != "") {
+            onStatusChange("Your url not correct")
+            return@launch
+        }
+        Log.d(TAG, "onTextClipboardChange: value = $textClipboard")
+        saveVideo(context, textClipboard)
 
     }
 
@@ -127,6 +158,10 @@ class DownloadViewModel @Inject constructor(
         _status.value = value
     }
 
+    private fun checkMatchUrl(url:String): Boolean {
+        return url.contains("youtu")
+    }
+
     private suspend fun toastFromCoroutine(context:Context, msg: String) = withContext(Dispatchers.Main) {
         try {
             Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
@@ -139,3 +174,5 @@ class DownloadViewModel @Inject constructor(
 }
 
 private const val OTHER_APP_PACKAGE = "com.google.android.youtube"
+
+private const val TAG = "DownloadViewModel"

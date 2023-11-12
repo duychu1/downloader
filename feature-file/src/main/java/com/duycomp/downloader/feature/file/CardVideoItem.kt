@@ -63,7 +63,7 @@ fun CardVideoItem(
         ) {
 
             DynamicAsyncImage(
-                imageUrl = uri,
+                uri = uri,
                 contentDescription = "uriLocal",
                 modifier = Modifier.fillMaxSize()
             )
@@ -118,7 +118,7 @@ private fun BoxScope.TextDuration(duration: String) {
         modifier = Modifier
             .padding(top = 4.dp, end = 8.dp)
             .align(Alignment.TopEnd),
-        color = MaterialTheme.colorScheme.primary,
+        color = MaterialTheme.colorScheme.onPrimary,
         fontSize = 10.sp,
         fontWeight = FontWeight.Bold
     )
@@ -137,7 +137,7 @@ private fun BoxScope.DeleteIconButton(onDeleteIconClick: () -> Unit) {
         Icon(
             imageVector = Icons.Default.Delete,
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.primary,
+            tint = MaterialTheme.colorScheme.onPrimary,
         )
     }
 }

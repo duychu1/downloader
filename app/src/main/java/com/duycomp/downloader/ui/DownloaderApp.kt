@@ -106,7 +106,7 @@ fun DownloaderApp(
                 }
 
                 //write include read
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
                     RequestPermissions(
                         permissions = listOf(
                             Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -114,6 +114,23 @@ fun DownloaderApp(
                     )
                 }
 
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
+//                    && Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+//                    RequestPermissions(
+//                        permissions = listOf(
+//                            Manifest.permission.READ_EXTERNAL_STORAGE
+//                        )
+//                    )
+//                }
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+                    RequestPermissions(
+                        permissions = listOf(
+                            Manifest.permission.READ_MEDIA_VIDEO,
+                            Manifest.permission.READ_MEDIA_IMAGES,
+
+                        )
+                    )
             }
         }
 

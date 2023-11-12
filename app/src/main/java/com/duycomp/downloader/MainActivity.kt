@@ -1,8 +1,11 @@
 package com.duycomp.downloader
 
+import android.content.ClipData
 import android.content.ClipboardManager
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
@@ -19,18 +22,13 @@ import androidx.core.view.WindowCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.duycomp.downloader.MainActivityUiState.*
-import com.duycomp.downloader.core.designsystem.component.toasttext
+import com.duycomp.downloader.MainActivityUiState.Loading
+import com.duycomp.downloader.MainActivityUiState.Success
 import com.duycomp.downloader.core.designsystem.theme.DownloaderTheme
 import com.duycomp.downloader.core.model.DarkThemeConfig
 import com.duycomp.downloader.ui.DownloaderApp
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
@@ -110,10 +108,26 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    override fun onNewIntent(intent: Intent?) {
+        when (intent?.action) {
+            Intent.ACTION_SEND -> {
+                if ("text/plain" == intent.type) {
+                    intent.getStringExtra(Intent.EXTRA_TEXT)?.let { inputString ->
+                        Log.d(TAG, "onNewIntent: $inputString")
+                        val clip: ClipData = ClipData.newPlainText("url", inputString)
+                        clipboard.setPrimaryClip(clip)
+                    }
+                }
+            }
+        }
+        super.onNewIntent(intent)
+    }
+    
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
-
         if (hasFocus) {
+            Log.d(TAG, "onWindowFocusChanged: ")
+            
             clipboard.primaryClip?.also {
                 val text = it.getItemAt(0)?.text.toString()
                 lifecycleScope.launch {
@@ -123,6 +137,8 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
+private const val TAG = "MainActivity"
 
 /**
  * Returns `true` if the dynamic color is disabled, as a function of the [uiState].

@@ -14,27 +14,37 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
+import coil.ImageLoader
 import coil.compose.AsyncImagePainter.State.Error
 import coil.compose.AsyncImagePainter.State.Loading
 import coil.compose.rememberAsyncImagePainter
+import coil.decode.VideoFrameDecoder
 
 /**
  * A wrapper around [AsyncImage] which determines the colorFilter based on the theme
  */
 @Composable
 fun DynamicAsyncImage(
-    imageUrl: String,
+    uri: String,
     contentDescription: String?,
     modifier: Modifier = Modifier,
     placeholder: Painter = painterResource(id = R.drawable.baseline_error_24),
 ) {
 //    val iconTint = LocalTintTheme.current.iconTint
+    val context = LocalContext.current
     var isLoading by remember { mutableStateOf(true) }
     var isError by remember { mutableStateOf(false) }
-    val imageLoader = rememberAsyncImagePainter(
-        model = imageUrl,
+
+    val painter = rememberAsyncImagePainter(
+        model = uri,
+        imageLoader = ImageLoader.Builder(context)
+            .components {
+                add(VideoFrameDecoder.Factory())
+            }
+            .build(),
         onState = { state ->
             isLoading = state is Loading
             isError = state is Error
@@ -50,16 +60,18 @@ fun DynamicAsyncImage(
             CircularProgressIndicator(
                 modifier = Modifier
                     .align(Alignment.Center)
-                    .fillMaxSize(0.4f),
+                    .fillMaxSize(0.3f),
                 color = MaterialTheme.colorScheme.tertiary,
             )
         }
 
         Image(
+            modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop,
-            painter = if (isError.not() && !isLocalInspection) imageLoader else placeholder,
+            painter = if (isError.not() && !isLocalInspection) painter else placeholder,
             contentDescription = contentDescription,
 //            colorFilter = if (iconTint != null) ColorFilter.tint(iconTint) else null,
         )
     }
 }
+
