@@ -27,6 +27,7 @@ dependencies {
     implementation(libs.android.lifecycle.viewModelCompose)
     implementation(libs.android.lifecycle.runtimeCompose)
     implementation(libs.coil.compose)
+    implementation(libs.androidx.media3.exoplayer)
 
 
     testImplementation(libs.junit)

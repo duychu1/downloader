@@ -22,6 +22,7 @@ import coil.compose.AsyncImagePainter.State.Error
 import coil.compose.AsyncImagePainter.State.Loading
 import coil.compose.rememberAsyncImagePainter
 import coil.decode.VideoFrameDecoder
+import coil.request.CachePolicy
 
 /**
  * A wrapper around [AsyncImage] which determines the colorFilter based on the theme
@@ -44,6 +45,8 @@ fun DynamicAsyncImage(
             .components {
                 add(VideoFrameDecoder.Factory())
             }
+            .memoryCachePolicy(CachePolicy.DISABLED)
+            .diskCachePolicy(CachePolicy.DISABLED)
             .build(),
         onState = { state ->
             isLoading = state is Loading

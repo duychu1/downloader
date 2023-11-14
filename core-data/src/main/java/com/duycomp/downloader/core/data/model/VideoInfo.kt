@@ -10,6 +10,7 @@ fun VideoInfoEntity.asExternalModel() = VideoInfo (
 )
 
 fun VideoInfo.asEntity() = VideoInfoEntity (
+    id = id,
     title = title,
     uri = uri,
     duration = duration

@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.duycomp.downloader.core.common.result.Result
@@ -12,13 +13,15 @@ import com.duycomp.downloader.core.common.result.asResult
 import com.duycomp.downloader.core.data.UserDataRepository
 import com.duycomp.downloader.core.data.VideoDatabaseRepository
 import com.duycomp.downloader.core.data.VideoNetworkRepository
+import com.duycomp.downloader.feature.download.notification.showDownloadNotification
+import com.duycomp.downloader.feature.download.notification.updateNotification
 import com.duycomp.downloader.feature.download.utils.saveFileToExternal
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -31,7 +34,8 @@ class DownloadViewModel @Inject constructor(
     private val videoNetworkRepository: VideoNetworkRepository,
     private val videoDatabaseRepository: VideoDatabaseRepository,
     private val userDataRepository: UserDataRepository,
-): ViewModel() {
+    private val channelId: String,
+) : ViewModel() {
 
     private val _status = MutableStateFlow("Let start!")
     val status: StateFlow<String> = _status
@@ -47,22 +51,30 @@ class DownloadViewModel @Inject constructor(
         initialValue = true,
     )
 
+    private var nId = 1
+    private val mapDownloadingId: MutableMap<String, Int> = mutableStateMapOf()
+
+
     private suspend fun saveVideo(
         context: Context,
         url: String
     ) = withContext(Dispatchers.IO) {
-            onStatusChange("Collecting data")
+        nId++
+        onStatusChange("Collecting data")
 
-            val videoInfo = videoNetworkRepository.fetchVideoInfo(url).fold(
-                onSuccess = { it },
-                onFailure = {
-                    onStatusChange("Can not fetch data!")
-                    return@withContext
-                }
-            )
+        val videoInfo = videoNetworkRepository.fetchVideoInfo(url).fold(
+            onSuccess = { it },
+            onFailure = {
+                onStatusChange("Can not fetch data!")
+                return@withContext
+            }
+        )
 
-        onStatusChange("Downloading...")
-        toastFromCoroutine(context, "Downloading...")
+        if (mapDownloadingId.contains(videoInfo.uri)) return@withContext
+
+        Log.d(TAG, "saveVideo: thread:${Thread.currentThread().name}")
+
+        mapDownloadingId[url] = nId
 
         saveFileToExternal(
             url = videoInfo.uri,
@@ -70,12 +82,34 @@ class DownloadViewModel @Inject constructor(
             directory = "Downloader",
             fileName = videoInfo.title,
             context = context
-        ).flowOn(Dispatchers.IO)
+        )
             .asResult()
+//            .flowOn(Dispatchers.IO)
             .collect { saveToExternal ->
                 Log.d(TAG, "saveVideo: collect")
-                when(saveToExternal) {
+                when (saveToExternal) {
+                    is Result.Loading -> {
+                        withContext(Dispatchers.Default) {
+                            if(mapDownloadingId.size == 1)
+                                onStatusChange("Downloading...")
+                            else if(mapDownloadingId.size > 1)
+                                onStatusChange("Downloading ${mapDownloadingId.size} video...")
+                        }
+                        toastFromCoroutine(context, "Downloading...")
+
+                        showDownloadNotification(
+                            context = context,
+                            notificationId = mapDownloadingId[url]!!,
+                            smallIcon = R.drawable.downloading,
+                            title = videoInfo.title,
+                            text = "Downloading...",
+                            channelId = channelId,
+                        )
+
+                    }
+
                     is Result.Success -> {
+
                         onStatusChange("Saved: ${videoInfo.title.take(18)}...")
 
                         withContext(Dispatchers.IO) {
@@ -87,13 +121,30 @@ class DownloadViewModel @Inject constructor(
                         }
 
                         toastFromCoroutine(context, "Download completed!")
+
+                        updateNotification(
+                            context = context,
+                            notificationId = mapDownloadingId[url]!!,
+                            text = videoInfo.title,
+                            title = "Download completed!",
+                            smallIcon = R.drawable.download_done,
+                            channelId = channelId,
+                        )
+
+                        mapDownloadingId.remove(url)
+                        Log.d(TAG, "saveVideo: mapDownloadingId=${mapDownloadingId.size}")
+                        Log.d(TAG, "saveVideo: mapDownloadingId=$mapDownloadingId")
+                        
+                        delay(3000)
+                        if(mapDownloadingId.size == 1)
+                            onStatusChange("Downloading...")
+                        else if(mapDownloadingId.size > 1)
+                            onStatusChange("Downloading ${mapDownloadingId.size} video...")
                     }
+
                     is Result.Error -> {
                         onStatusChange("Download error!")
                         println(saveToExternal.exception?.printStackTrace())
-
-                    }
-                    is Result.Loading -> {
 
                     }
                 }
@@ -110,17 +161,20 @@ class DownloadViewModel @Inject constructor(
 //        downloadManager.enqueue(request)
     }
 
-    suspend fun onTextClipboardChange(textClipboard: String, context: Context) = viewModelScope.launch{
-        if (_textField.value == textClipboard) return@launch
-        _textField.value = textClipboard
-        if (!checkMatchUrl(textClipboard) && textClipboard != "") {
-            onStatusChange("Your url not correct")
-            return@launch
-        }
-        Log.d(TAG, "onTextClipboardChange: value = $textClipboard")
-        saveVideo(context, textClipboard)
+    suspend fun onTextClipboardChange(textClipboard: String, context: Context) =
+        viewModelScope.launch {
+            Log.d(TAG, "onTextClipboardChange: textClipboard=$textClipboard")
+            Log.d(TAG, "onTextClipboardChange: _textField=${_textField.value}")
+            if (_textField.value == textClipboard) return@launch
+            _textField.value = textClipboard
+            if (!checkMatchUrl(textClipboard) && textClipboard != "") {
+                onStatusChange("Your url not correct")
+                return@launch
+            }
+//        Log.d(TAG, "onTextClipboardChange: value = $textClipboard")
+            saveVideo(context, textClipboard)
 
-    }
+        }
 
     fun onSwapIconClick(isDownloadBtnOnTop: Boolean) = viewModelScope.launch {
         userDataRepository.setBtnDownloadOnTop(isDownloadBtnOnTop)
@@ -142,14 +196,14 @@ class DownloadViewModel @Inject constructor(
     }
 
     fun onDownloadClick(context: Context) = viewModelScope.launch {
-        saveVideo(context= context, url = _textField.value)
+        saveVideo(context = context, url = _textField.value)
     }
 
     fun onTutorialClick() {
 
     }
 
-    fun onTextFieldChange(value: String)  = viewModelScope.launch {
+    fun onTextFieldChange(value: String) = viewModelScope.launch {
         _textField.value = value
     }
 
@@ -158,21 +212,22 @@ class DownloadViewModel @Inject constructor(
         _status.value = value
     }
 
-    private fun checkMatchUrl(url:String): Boolean {
+    private fun checkMatchUrl(url: String): Boolean {
         return url.contains("youtu")
     }
 
-    private suspend fun toastFromCoroutine(context:Context, msg: String) = withContext(Dispatchers.Main) {
-        try {
-            Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
-        }catch (_:Exception) {
+    private suspend fun toastFromCoroutine(context: Context, msg: String) =
+        withContext(Dispatchers.Main) {
+            try {
+                Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+            } catch (_: Exception) {
 
+            }
         }
-    }
-
 
 }
 
 private const val OTHER_APP_PACKAGE = "com.google.android.youtube"
 
 private const val TAG = "DownloadViewModel"
+

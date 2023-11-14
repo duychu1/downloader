@@ -36,6 +36,7 @@ material = "1.10.0"
 androidLifecycle = "2.6.2"
 splashscreen = "1.0.1"
 kotlinYoutubeextractor = "0.0.7"
+media3Exoplayer = "1.1.1"
 
 
 [libraries]
@@ -64,6 +65,7 @@ android-navigation-compose-ktx = { module = "androidx.navigation:navigation-comm
 android-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
 android-lifecycle-runtimeCompose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidLifecycle" }
 android-lifecycle-viewModelCompose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidLifecycle" }
+androidx-media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "media3Exoplayer" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 coil-video = { module = "io.coil-kt:coil-video", version.ref = "coilVideo" }
 splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "splashscreen" }

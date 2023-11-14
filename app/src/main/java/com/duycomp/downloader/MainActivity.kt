@@ -126,12 +126,13 @@ class MainActivity : ComponentActivity() {
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         if (hasFocus) {
-            Log.d(TAG, "onWindowFocusChanged: ")
+
             
             clipboard.primaryClip?.also {
-                val text = it.getItemAt(0)?.text.toString()
                 lifecycleScope.launch {
+                    val text = it.getItemAt(0)?.text.toString()
                     textClipboard = text
+                    Log.d(TAG, "onWindowFocusChanged: textClipboard: $textClipboard")
                 }
             }
         }
