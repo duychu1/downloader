@@ -78,8 +78,7 @@ fun FileScreen(
             VideoDataUiState.Loading -> Text("Loading")
             is VideoDataUiState.VideosData ->
                 FileScreenContent(
-//                    videosData = uiState.videosData
-                    videosData = fakeVideoInfo,
+                    videosData = uiState.videosData,
                     onImageClick = onImageClick,
                     onDeleteVideo = onDeleteVideo,
                     onShareVideo = onShareVideo

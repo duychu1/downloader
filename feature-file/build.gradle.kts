@@ -22,10 +22,12 @@ dependencies {
     implementation(project(":core-common"))
     implementation(project(":core-data"))
 
+    implementation(libs.coil.video)
     implementation(libs.hilt.navigation.compose)
     implementation(libs.android.lifecycle.viewModelCompose)
     implementation(libs.android.lifecycle.runtimeCompose)
     implementation(libs.coil.compose)
+    implementation(libs.androidx.media3.exoplayer)
 
 
     testImplementation(libs.junit)
