@@ -134,7 +134,7 @@ private fun DownloadScreenContent(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.background)
+//                    .background(MaterialTheme.colorScheme.background)
                     .constrainAs(tutorial) {
                         bottom.linkTo(mainContent.top)
                         start.linkTo(parent.start)
@@ -142,7 +142,7 @@ private fun DownloadScreenContent(
                     },
                 contentAlignment = Alignment.Center
             ) {
-                TutorialButton()
+//                TutorialButton()
             }
 
             Box(

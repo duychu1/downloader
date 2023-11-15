@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="how_to_use">How to use</string>
-    <string name="video_tutorial">Video tutorial</string>
+    <string name="tutorial_download">Copy link and back to app</string>
     <string name="directory">Directory</string>
     <string name="app_name">Downloader</string>
     <string name="link_copied">Link copied</string>
