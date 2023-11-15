@@ -112,6 +112,7 @@ protobuf-kotlin-lite = { group = "com.google.protobuf", name = "protobuf-kotlin-
 protobuf-protoc = { group = "com.google.protobuf", name = "protoc", version.ref = "protobuf" }
 dataStore-core = { group = "androidx.datastore", name = "datastore", version.ref = "dataStore" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+androidx-media3-ui = { group = "androidx.media3", name = "media3-ui", version = "1.1.1" }
 
 [bundles]
 androidComposeLibs = [

@@ -52,7 +52,7 @@ fun FileRoute(
         uri = it
     }
 
-    if (isShowPlayVideo) PlayVideoDialog(uri = uri, onDismiss = { isShowPlayVideo = false })
+    if (isShowPlayVideo) VideoPlayerDialog(uri = uri, onDismiss = { isShowPlayVideo = false })
 
     FileScreen(
         uiState = uiState,
@@ -96,6 +96,7 @@ fun FileScreenContent(
     onDeleteVideo: (VideoInfo) -> Unit,
     onShareVideo: (String, Context) -> Unit
 ) {
+
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),
         contentPadding = PaddingValues(4.dp),

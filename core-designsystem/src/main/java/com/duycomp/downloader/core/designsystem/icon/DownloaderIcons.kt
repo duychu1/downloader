@@ -1,6 +1,7 @@
 package com.duycomp.downloader.core.designsystem.icon
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.DarkMode
 import androidx.compose.material.icons.rounded.Download
 import androidx.compose.material.icons.rounded.Error
@@ -22,4 +23,5 @@ object DownloaderIcons {
     val share = Icons.Rounded.Share
     val star = Icons.Rounded.Star
     val menu = Icons.Rounded.Menu
+    val arrowBack = Icons.Rounded.ArrowBack
 }
